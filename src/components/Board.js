@@ -9,8 +9,32 @@ const directions = {
   key37: 'left'
 }
 
-function nextPosition(position, width, height) {
-  return (position + 1) % width
+function nextPosition(position, direction, width, height) {
+  const x = position % width
+  const y = Math.floor(position / width)
+  let nextX
+  let nextY
+
+  switch (direction) {
+    case 'up':
+      nextX = x
+      nextY = (y - 1) < 0 ? height - 1 : y - 1
+      break
+    case 'right':
+      nextX = (x + 1) % width
+      nextY = y
+      break
+    case 'down':
+      nextX = x
+      nextY = (y + 1) % height
+      break
+    default:
+      nextX = (x - 1) < 0 ? width - 1 : x - 1
+      nextY = y
+      break 
+  }
+
+  return nextY * height + nextX
 }
 
 export default class Board extends Component {
@@ -57,6 +81,7 @@ export default class Board extends Component {
 
     snake.push(nextPosition(
       snake[snake.length - 1],
+      this.state.direction,
       this.props.width,
       this.props.height
     ))
