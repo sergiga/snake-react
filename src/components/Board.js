@@ -6,8 +6,11 @@ export default class Board extends Component {
   constructor(props) {
     super(props)
 
+    let squares = Array(props.width * props.height).fill(0)
+    squares[0] = 1
+
     this.state = {
-      squares: Array(props.width * props.height).fill(0),
+      squares: squares,
       snake: Array(1).fill(0),
       score: 0,
     }
