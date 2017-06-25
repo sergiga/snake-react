@@ -3,6 +3,12 @@ import React, { Component } from 'react'
 import Greetings from './Greetings'
 import Board from './Board'
 
+const difficulties = {
+  easy: 160,
+  normal: 120,
+  hard: 80
+}
+
 export default class Game extends Component {
   constructor() {
     super()
@@ -36,7 +42,7 @@ export default class Game extends Component {
         <Board 
           width = { this.state.width }
           height = { this.state.height }
-          difficulty = { this.state.difficulty }
+          difficulty = { difficulties[this.state.difficulty] }
         />
       )
     }

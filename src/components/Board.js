@@ -65,7 +65,7 @@ export default class Board extends Component {
 
     this.frameID = setInterval(
       () => this.nextFrame(),
-      120
+      this.props.difficulty
     );
   }
 
