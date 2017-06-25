@@ -2,6 +2,13 @@ import React, { Component } from 'react'
 
 import Square from './Square'
 
+const directions = {
+  key38: 'up',
+  key39: 'right',
+  key40: 'down',
+  key37: 'left'
+}
+
 function nextPosition(position, width, height) {
   return (position + 1) % width
 }
@@ -16,11 +23,22 @@ export default class Board extends Component {
     this.state = {
       squares: squares,
       snake: Array(1).fill(0),
+      direction: directions.key39,
       score: 0,
     }
+
+    this.handleKeyDown = this.handleKeyDown.bind(this)
+  }
+
+  handleKeyDown(event) {
+    this.setState({
+      direction: directions['key' + event.keyCode]
+    })
   }
 
   componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown)
+
     this.frameID = setInterval(
       () => this.nextFrame(),
       120
@@ -28,6 +46,8 @@ export default class Board extends Component {
   }
 
   componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown)
+
     clearInterval(this.frameID);
   }
 
