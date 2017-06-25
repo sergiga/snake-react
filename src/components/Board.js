@@ -9,6 +9,17 @@ const directions = {
   key37: 'left'
 }
 
+function updateSquares(squares, snake) {
+  return squares.map((square, position) => {
+    if(snake.some(s => s === position)) {
+      return 1
+    }
+    else {
+      return 0
+    }
+  })
+}
+
 function nextPosition(position, direction, width, height) {
   const x = position % width
   const y = Math.floor(position / width)
@@ -87,14 +98,7 @@ export default class Board extends Component {
     ))
     snake.shift()
 
-    squares = squares.map((square, position) => {
-      if(snake.some(s => s === position)) {
-        return 1
-      }
-      else {
-        return 0
-      }
-    })
+    squares = updateSquares(squares, snake)
 
     this.setState({
       squares: squares,
