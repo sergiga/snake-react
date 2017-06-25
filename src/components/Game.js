@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 
 import Greetings from './Greetings'
+import Board from './Board'
 
 export default class Game extends Component {
   constructor() {
     super()
 
     this.state = {
-      snake: [{ x: 0, y: 0 }],
-      score: 0,
+      width: 10,
+      height: 10,
       difficulty: "easy",
       activeGame: false
     }
@@ -32,7 +33,11 @@ export default class Game extends Component {
 
     if(isGameActive) {
       return (
-        <div>Playing</div>
+        <Board 
+          width = { this.state.width }
+          height = { this.state.height }
+          difficulty = { this.state.difficulty }
+        />
       )
     }
     else {

@@ -1,0 +1,17 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
+
+.board {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.board-square {
+  flex: 1 1 20px;
+  height: 20px;
+  margin-right: -1px;
+  margin-top: -1px;
+  border: 1px solid #ddd;  
+}
