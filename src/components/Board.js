@@ -9,10 +9,13 @@ const directions = {
   key37: 'left'
 }
 
-function updateSquares(squares, snake) {
+function updateSquares(squares, snake, apple) {
   return squares.map((square, position) => {
     if(snake.some(s => s === position)) {
       return 1
+    }
+    else if(apple === position) {
+      return 2
     }
     else {
       return 0
@@ -52,12 +55,14 @@ export default class Board extends Component {
   constructor(props) {
     super(props)
 
-    let squares = Array(props.width * props.height).fill(0)
+    const totalSize = props.width * props.height
+    let squares = Array(totalSize).fill(0)
     squares[0] = 1
 
     this.state = {
       squares: squares,
       snake: Array(1).fill(0),
+      apple: Math.floor((Math.random() * (totalSize - 1)) + 1),
       direction: directions.key39,
       score: 0,
     }
@@ -87,6 +92,7 @@ export default class Board extends Component {
   }
 
   nextFrame() {
+    const apple = this.state.apple
     const snake = this.state.snake.slice()
     let squares = this.state.squares.slice()
 
@@ -98,7 +104,7 @@ export default class Board extends Component {
     ))
     snake.shift()
 
-    squares = updateSquares(squares, snake)
+    squares = updateSquares(squares, snake, apple)
 
     this.setState({
       squares: squares,
