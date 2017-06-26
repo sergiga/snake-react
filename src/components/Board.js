@@ -9,21 +9,7 @@ const directions = {
   key37: 'left'
 }
 
-function updateSquares(squares, snake, apple) {
-  return squares.map((square, position) => {
-    if(snake.some(s => s === position)) {
-      return 1
-    }
-    else if(apple === position) {
-      return 2
-    }
-    else {
-      return 0
-    }
-  })
-}
-
-function nextPosition(position, direction, width, height) {
+function calculateNextPosition(position, direction, width, height) {
   const x = position % width
   const y = Math.floor(position / width)
   let nextX
@@ -49,6 +35,43 @@ function nextPosition(position, direction, width, height) {
   }
 
   return nextY * height + nextX
+}
+
+function updateSnake(snake, apple, nextPosition) {
+  snake.push(nextPosition)
+  
+  if(nextPosition !== apple) { snake.shift() }
+}
+
+function updateApple(apple, snake, squares) {
+  const snakeHead = snake[snake.length - 1]
+
+  if(apple === snakeHead) { 
+    const emptySquares = squares
+      .map((square, position) => {
+        return { value: square, position: position }
+      })
+      .filter(s => s.value === 0)
+    const applePosition = Math.floor(
+      Math.random() * (emptySquares.length - 1)
+    )
+    apple = emptySquares[applePosition].position
+  }
+  return apple
+}
+
+function updateSquares(squares, snake, apple) {
+  return squares.map((square, position) => {
+    if(snake.some(s => s === position)) {
+      return 1
+    }
+    else if(apple === position) {
+      return 2
+    }
+    else {
+      return 0
+    }
+  })
 }
 
 export default class Board extends Component {
@@ -92,23 +115,32 @@ export default class Board extends Component {
   }
 
   nextFrame() {
-    const apple = this.state.apple
     const snake = this.state.snake.slice()
-    let squares = this.state.squares.slice()
-
-    snake.push(nextPosition(
+    const nextPosition = calculateNextPosition(
       snake[snake.length - 1],
       this.state.direction,
       this.props.width,
       this.props.height
-    ))
-    snake.shift()
+    )
+    let squares = this.state.squares.slice()
+    let apple = this.state.apple
 
+    updateSnake(
+      snake, 
+      apple, 
+      nextPosition
+    )
+    apple = updateApple(
+      apple, 
+      snake,
+      squares
+    )
     squares = updateSquares(squares, snake, apple)
-
+    
     this.setState({
       squares: squares,
-      snake: snake
+      snake: snake,
+      apple: apple
     })
   }
 
@@ -123,11 +155,8 @@ export default class Board extends Component {
       )
     })
     return (
-      <div>
-        <div>Playing on { this.props.difficulty } mode.</div>
-        <div className = 'board' style = { style }>
-            { squares }
-        </div>
+      <div className = 'board' style = { style }>
+        { squares }
       </div>
     )
   }
