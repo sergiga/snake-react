@@ -145,7 +145,7 @@ export default class Board extends Component {
   }
 
   render () {
-    const style = { width: (this.props.width * 20 + this.props.width) + 'px' }
+    const style = { width: (this.props.width * 20) + 'px' }
     const squares = this.state.squares.map((square, position) => {
       return (
         <Square 
