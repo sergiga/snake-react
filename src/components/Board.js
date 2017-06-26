@@ -94,9 +94,21 @@ export default class Board extends Component {
   }
 
   handleKeyDown(event) {
-    this.setState({
-      direction: directions['key' + event.keyCode]
-    })
+    const nextDirection = directions['key' + event.keyCode]
+    const snakeHead = this.state.snake[this.state.snake.length - 1]
+    const snakeSecondBlock = this.state.snake[this.state.snake.length - 2]
+    const nextPosition = calculateNextPosition(
+      snakeHead,
+      nextDirection,
+      this.props.width,
+      this.props.height
+    )
+
+    if(nextPosition !== snakeSecondBlock) {
+      this.setState({
+        direction: nextDirection
+      })
+    }
   }
 
   componentDidMount() {
